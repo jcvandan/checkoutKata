@@ -20,15 +20,19 @@ namespace Kata.Discounts
         
         public bool IsMatch(IEnumerable<Item> matchingItems)
         {
+            if (!matchingItems.Any())
+                return false;
             if (matchingItems.Select(i => i.Sku).Distinct().Count() > 1)
                 throw new ArgumentException("Please pass matching Sku items");
 
-            return false;
+            return matchingItems.First().Sku == _skuId && matchingItems.Count() >= _quantity;
         }
 
-        public decimal DiscountPrice(IEnumerable<Item> matchingItems)
+        public decimal DiscountedPrice(IEnumerable<Item> matchingItems)
         {
-            return 0m;
+            int totalItems = matchingItems.Count();
+            int remainderItems = totalItems - _quantity;
+            return _discountPrice + remainderItems * matchingItems.First().UnitPrice;
         }
     }
 }

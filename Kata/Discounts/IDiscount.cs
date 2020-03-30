@@ -6,6 +6,6 @@ namespace Kata.Discounts
     public interface IDiscount
     {
         bool IsMatch(IEnumerable<Item> matchingItems);
-        decimal DiscountPrice(IEnumerable<Item> matchingItems);
+        decimal DiscountedPrice(IEnumerable<Item> matchingItems);
     }
 }
