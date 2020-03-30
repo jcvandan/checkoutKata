@@ -2,14 +2,16 @@
 {
     public class Checkout
     {
+        private decimal _runningTotal = 0m;
+        
         public decimal Total()
         {
-            return 0m;
+            return _runningTotal;
         }
  
         public void Scan(Item item)
         {
-            
+            _runningTotal += item.UnitPrice;
         }
     }
 }
