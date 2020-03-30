@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Kata.Discounts;
 using Kata.Models;
 using Xunit;
 
@@ -39,6 +40,26 @@ namespace Kata.UnitTests
             
             // Assert
             checkout.Total().Should().Be(1.4m);
+        }
+
+        [Fact] 
+        public void ShouldApply_MultipleDiscounts_RegardlessOfScanOrder()
+        {
+            // Arrange
+            var multipleAppleDiscount = new MultipleItemDiscount("A99", 3, 1.3m);
+            var biscuitDiscount = new MultipleItemDiscount("B15", 2, 0.45m);
+            
+            // Act
+            var checkout = new Checkout(new[] {multipleAppleDiscount, biscuitDiscount});
+            checkout.Scan(_apple);
+            checkout.Scan(_apple);
+            checkout.Scan(_biscuits);
+            checkout.Scan(_apple);
+            checkout.Scan(_biscuits);
+            checkout.Scan(_cola);
+            
+            // Assert
+            checkout.Total().Should().Be(1.3m + 0.45m + 0.6m);
         }
     }
 }

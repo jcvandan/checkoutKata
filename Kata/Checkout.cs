@@ -21,9 +21,34 @@ namespace Kata
         
         public decimal Total()
         {
-            return _items.Sum(i => i.UnitPrice);
+            decimal total = 0m;
+
+            foreach (var skuBatch in _items.GroupBy(i => i.Sku))
+            {
+                var matchingDiscounts = _discounts.Where(d => d.SkuId == skuBatch.Key);
+                if (matchingDiscounts.Any())
+                {
+                    foreach (var discount in matchingDiscounts)
+                    {
+                        total += GetDiscountedPrice(discount, skuBatch);
+                    }
+                }
+                else
+                {
+                    total += skuBatch.Sum(b => b.UnitPrice);
+                }
+            }
+
+            return total;
         }
- 
+
+        private static decimal GetDiscountedPrice(IDiscount discount, IGrouping<string, Item> skuBatch)
+        {
+            return discount.IsMatch(skuBatch)
+                ? discount.DiscountedPrice(skuBatch)
+                : skuBatch.Sum(b => b.UnitPrice);
+        }
+
         public void Scan(Item item)
         {
             _items.Add(item);
