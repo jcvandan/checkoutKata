@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Kata.Models;
 using Xunit;
 
 namespace Kata.UnitTests
@@ -29,6 +30,19 @@ namespace Kata.UnitTests
         
         [Fact]
         public void TotalShouldMatch_SumOfMultipleUnitPrices_WhenManyItems_AreScanned()
+        {
+            // Act
+            var checkout = new Checkout();
+            checkout.Scan(_apple);
+            checkout.Scan(_biscuits);
+            checkout.Scan(_cola);
+            
+            // Assert
+            checkout.Total().Should().Be(1.4m);
+        }
+        
+        [Fact]
+        public void DiscountShould_SumOfMultipleUnitPrices_WhenManyItems_AreScanned()
         {
             // Act
             var checkout = new Checkout();

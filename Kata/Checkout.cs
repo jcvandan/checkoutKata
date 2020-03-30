@@ -1,17 +1,29 @@
-﻿namespace Kata
+﻿using System.Collections.Generic;
+using System.Linq;
+using Kata.Discounts;
+using Kata.Models;
+
+namespace Kata
 {
     public class Checkout
     {
-        private decimal _runningTotal = 0m;
+        private readonly IEnumerable<IDiscount> _discounts;
+        private readonly List<Item> _items;
+
+        public Checkout(IEnumerable<IDiscount> discounts = null)
+        {
+            _discounts = discounts ?? new List<IDiscount>();
+            _items = new List<Item>();
+        }
         
         public decimal Total()
         {
-            return _runningTotal;
+            return _items.Sum(i => i.UnitPrice);
         }
  
         public void Scan(Item item)
         {
-            _runningTotal += item.UnitPrice;
+            _items.Add(item);
         }
     }
 }

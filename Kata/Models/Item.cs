@@ -1,4 +1,4 @@
-﻿namespace Kata
+﻿namespace Kata.Models
 {
     public class Item
     {
